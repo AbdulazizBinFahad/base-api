@@ -1,8 +1,9 @@
-const swaggerJSDoc = require('swagger-jsdoc');
+import swaggerJSDoc from 'swagger-jsdoc';
+
 require('dotenv').config();
 
-const PORT = process.env.PORT || 5000;
-const BASE_URL = process.env.BASE_URL || 'http://localhost';
+const SWAGGER_PORT: number = parseInt(process.env.PORT || '5000', 10);
+const SWAGGER_BASE_URL: string = process.env.BASE_URL || 'http://localhost';
 
 const options = {
   definition: {
@@ -14,13 +15,13 @@ const options = {
     },
     servers: [
       {
-        url: `${BASE_URL}:${PORT}`,
+        url: `${SWAGGER_BASE_URL}:${SWAGGER_PORT}`,
       },
     ],
   },
-  apis: ['./src/routes/*.js'],
+  apis: ['./src/routes/*.ts'],
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
-module.exports = swaggerSpec;
+export default swaggerSpec;
