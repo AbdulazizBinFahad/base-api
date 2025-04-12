@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import crypto from 'crypto';
 import User from '../models/User';
 import { generateToken } from '../utils/jwt';
-import { sendVerificationEmail } from '../utils/mailer';
+import { sendPasswordResetEmail, sendVerificationEmail } from '../utils/mailer';
 
 // Register
 export const register = async (req: Request, res: Response): Promise<void> => {
@@ -141,7 +141,7 @@ export const forgotPassword = async (req: Request, res: Response): Promise<void>
     user.verificationCode = resetCode;
     await user.save();
 
-    await sendVerificationEmail(user.email, resetCode); // reuse same mailer for simplicity
+    await sendPasswordResetEmail(user.email, resetCode); // reuse same mailer for simplicity
 
     res.status(200).json({ message: 'Reset link has been sent to your email.' });
   } catch (err: any) {
