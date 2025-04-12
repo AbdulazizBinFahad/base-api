@@ -6,8 +6,8 @@ dotenv.config();
 const BASE_URL = process.env.BASE_URL || 'http://localhost';
 const PORT = parseInt(process.env.PORT || '5000', 10);
 const COMPANY_NAME = process.env.COMPANY_NAME || 'Your Company';
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
-// Create reusable transporter
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT) || 587,
@@ -18,11 +18,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-/**
- * Sends a verification email to the user.
- * @param to - Recipient email address
- * @param verificationCode - Unique verification code
- */
 export const sendVerificationEmail = async (to: string, verificationCode: string): Promise<void> => {
   const link = `${BASE_URL}:${PORT}/api/auth/verify-email/${verificationCode}`;
 
@@ -41,13 +36,8 @@ export const sendVerificationEmail = async (to: string, verificationCode: string
   await transporter.sendMail(mailOptions);
 };
 
-/**
- * Sends a password reset email to the user.
- * @param to - Recipient email address
- * @param resetCode - Unique verification code
- */
 export const sendPasswordResetEmail = async (to: string, resetCode: string): Promise<void> => {
-  const link = `${BASE_URL}:${PORT}/reset-password?code=${resetCode}`;
+  const link = `${FRONTEND_URL}/reset-password?code=${resetCode}`;
 
   const mailOptions = {
     from: `"${COMPANY_NAME} Support" <${process.env.RESET_EMAIL_USER || process.env.EMAIL_USER}>`,
