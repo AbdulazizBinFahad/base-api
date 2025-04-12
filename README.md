@@ -22,6 +22,6 @@ This project is designed to **save time** for any developer who wants to quickly
 ## 📦 Installation
 
 ```bash
-git clone https://github.com/your-username/base-api.git
+git clone https://github.com/AbdulazizBinFahad/base-api.git
 cd base-api
 npm install
