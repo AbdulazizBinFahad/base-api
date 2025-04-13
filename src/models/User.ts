@@ -8,6 +8,7 @@ export interface IUser extends Document {
   password: string;
   isVerified: boolean;
   verificationCode: string | null;
+  role: 'user' | 'admin';
   comparePassword: (plainPassword: string) => Promise<boolean>;
   createdAt: Date;
   updatedAt: Date;
@@ -40,6 +41,11 @@ const userSchema = new Schema<IUser>(
     verificationCode: {
       type: String,
       default: null,
+    },
+    role: {
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user',
     },
   },
   { timestamps: true }
