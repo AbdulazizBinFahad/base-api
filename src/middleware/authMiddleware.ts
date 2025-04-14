@@ -13,24 +13,26 @@ declare global {
   }
 }
 
-export const authorize = (requiredRole?: string) => (req: Request, res: Response, next: NextFunction) => {
+export const authorize = (requiredRole?: string) => (req: Request, res: Response, next: NextFunction): void => {
     const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+    const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-        return res.status(401).json({ message: 'Access denied. No token provided.' });
+      res.status(401).json({ message: 'Access denied. No token provided.' });
+      return;
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as TokenPayload;
-        req.user = decoded;
+      const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as TokenPayload;
+      req.user = decoded;
 
-        if (requiredRole && decoded.role !== requiredRole) {
-        return res.status(403).json({ message: 'Access denied. Insufficient permissions.' });
-        }
+      if (requiredRole && decoded.role !== requiredRole) {
+        res.status(403).json({ message: 'Access denied. Insufficient permissions.' });
+        return;
+      }
 
-        next();
+      next();
     } catch (err) {
-        return res.status(403).json({ message: 'Invalid or expired token.' });
+      res.status(403).json({ message: 'Invalid or expired token.' });
     }
 };
