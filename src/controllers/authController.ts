@@ -4,7 +4,11 @@ import User from '../models/User';
 import { generateToken } from '../utils/jwt';
 import { sendPasswordResetEmail, sendVerificationEmail } from '../utils/mailer';
 
-// Register
+/**
+ * @desc Register new user
+ * @route POST /api/auth/register
+ * @access Public
+ */
 export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const { name, email, password } = req.body;
@@ -67,7 +71,11 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// Verify Email
+/**
+ * @desc Verify email using the verification code
+ * @route GET /api/auth/verify-email/:code
+ * @access Public
+ */
 export const verifyEmail = async (req: Request, res: Response): Promise<void> => {
   try {
     const { code } = req.params;
@@ -90,7 +98,11 @@ export const verifyEmail = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-// Login
+/**
+ * @desc Login user and return JWT token
+ * @route POST /api/auth/login
+ * @access Public
+ */
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
@@ -125,7 +137,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// Forgot Password
+/**
+ * @desc Send password reset link to user's email
+ * @route POST /api/auth/forgot-password
+ * @access Public
+ */
 export const forgotPassword = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email } = req.body;
@@ -154,7 +170,11 @@ export const forgotPassword = async (req: Request, res: Response): Promise<void>
   }
 };
 
-// Reset Password
+/**
+ * @desc Reset password using the reset code
+ * @route POST /api/auth/reset-password
+ * @access Public
+ */
 export const resetPassword = async (req: Request, res: Response): Promise<void> => {
   try {
     const { code, newPassword } = req.body;
