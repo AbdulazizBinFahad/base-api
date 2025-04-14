@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './docs/swagger';
 import authRoutes from './routes/authRoutes';
-import './types/auth';
+import usersRoutes from './routes/userRoutes';
 
 const app = express();
 
@@ -14,6 +14,9 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Authentication routes
 app.use('/api/auth', authRoutes);
+
+// Users routes
+app.use('/api/users', usersRoutes);
 
 // Root route
 app.get('/', (req: Request, res: Response) => {
