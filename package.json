@@ -2,7 +2,7 @@
   "name": "base-api",
   "version": "1.0.0",
   "description": "Backend API for authentication using Node.js and Express",
-  "main": "server.js",
+  "main": "src/server.ts",
   "scripts": {
     "dev": "nodemon --watch src --ext ts --exec ts-node src/server.ts",
     "build": "tsc",
