@@ -1,16 +1,11 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { TokenPayload } from '../types/auth';
 
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 const JWT_EXPIRES_IN = (process.env.JWT_EXPIRES_IN || '7d') as jwt.SignOptions['expiresIn'];
-
-interface TokenPayload {
-  id: string;
-  email: string;
-  [key: string]: any;
-}
 
 /**
  * Generate a JWT token
