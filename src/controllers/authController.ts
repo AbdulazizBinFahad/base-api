@@ -112,7 +112,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const token = generateToken({ id: user._id.toString(), email: user.email });
+    const token = generateToken({
+      id: user._id.toString(),
+      email: user.email,
+      role: user.role,
+    });
 
     res.status(200).json({ token });
   } catch (err: any) {
