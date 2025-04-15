@@ -6,6 +6,7 @@ import {
   forgotPassword,
   resetPassword,
 } from '../controllers/authController';
+import { validateRegistration, validateLogin } from '../middleware/validationMiddleware';
 
 const router = Router();
 
@@ -45,7 +46,7 @@ const router = Router();
  *       400:
  *         description: Missing or invalid input
  */
-router.post('/register', register);
+router.post('/register', validateRegistration, register);
 
 /**
  * @swagger
@@ -95,7 +96,7 @@ router.get('/verify-email/:code', verifyEmail);
  *       403:
  *         description: Email not verified
  */
-router.post('/login', login);
+router.post('/login', validateLogin, login);
 
 /**
  * @swagger

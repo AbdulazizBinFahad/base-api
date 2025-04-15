@@ -13,37 +13,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const { name, email, password } = req.body;
 
-    if (!name || !email || !password) {
-      res.status(400).json({ message: 'All fields are required.' });
-      return;
-    }
-
-    // name: English letters, numbers, underscores, and hyphens only, 4-20 chars
-    if (!/^[a-zA-Z0-9_-]{4,20}$/.test(name)) {
-      res.status(400).json({ message: 'Name must be 4-20 characters long and can include letters, numbers, underscores, and hyphens only.' });
-      return;
-    }
-
-    // email format check
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      res.status(400).json({ message: 'Invalid email address.' });
-      return;
-    }
-
-    // password: min 8 chars, uppercase, lowercase, number, special char
-    if (
-      password.length < 8 ||
-      !/[a-z]/.test(password) ||
-      !/[A-Z]/.test(password) ||
-      !/\d/.test(password) ||
-      !/[^\w\s]/.test(password)
-    ) {
-      res.status(400).json({
-        message: 'Password must be at least 8 characters and include uppercase, lowercase, number, and symbol.',
-      });
-      return;
-    }
-
     const existingUser = await User.findOne({ $or: [{ email }, { name }] });
 
     if (existingUser) {
@@ -107,11 +76,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
-      res.status(400).json({ message: 'Email and password are required.' });
-      return;
-    }
-
     const user = await User.findOne({ email });
 
     if (!user || !(await user.comparePassword(password))) {
@@ -146,11 +110,6 @@ export const forgotPassword = async (req: Request, res: Response): Promise<void>
   try {
     const { email } = req.body;
 
-    if (!email) {
-      res.status(400).json({ message: 'Email is required.' });
-      return;
-    }
-
     const user = await User.findOne({ email });
     if (!user) {
       res.status(404).json({ message: 'User not found.' });
@@ -161,7 +120,7 @@ export const forgotPassword = async (req: Request, res: Response): Promise<void>
     user.verificationCode = resetCode;
     await user.save();
 
-    await sendPasswordResetEmail(user.email, resetCode); // reuse same mailer for simplicity
+    await sendPasswordResetEmail(user.email, resetCode);
 
     res.status(200).json({ message: 'Reset link has been sent to your email.' });
   } catch (err: any) {
@@ -178,11 +137,6 @@ export const forgotPassword = async (req: Request, res: Response): Promise<void>
 export const resetPassword = async (req: Request, res: Response): Promise<void> => {
   try {
     const { code, newPassword } = req.body;
-
-    if (!code || !newPassword) {
-      res.status(400).json({ message: 'Reset code and new password are required.' });
-      return;
-    }
 
     const user = await User.findOne({ verificationCode: code });
     if (!user) {

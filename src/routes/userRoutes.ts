@@ -8,6 +8,7 @@ import {
   deleteUserById,
 } from '../controllers/userController';
 import { authorize } from '../middleware/authMiddleware';
+import { validateProfileUpdate } from '../middleware/validationMiddleware';
 
 const router = Router();
 
@@ -59,7 +60,7 @@ router.get('/me', authorize(), getMe);
  *       401:
  *         description: Unauthorized
  */
-router.put('/update', authorize(), updateUser);
+router.put('/update', authorize(), validateProfileUpdate, updateUser);
 
 /**
  * @swagger
