@@ -138,6 +138,20 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
   try {
     const { code, newPassword } = req.body;
 
+    // Check password strength
+    if (
+      newPassword.length < 8 ||
+      !/[a-z]/.test(newPassword) ||
+      !/[A-Z]/.test(newPassword) ||
+      !/\d/.test(newPassword) ||
+      !/[^\w\s]/.test(newPassword)
+    ) {
+      res.status(400).json({
+        message: 'Password must be at least 8 characters and include uppercase, lowercase, number, and symbol.',
+      });
+      return;
+    }
+
     const user = await User.findOne({ verificationCode: code });
     if (!user) {
       res.status(400).json({ message: 'Invalid or expired reset code.' });
