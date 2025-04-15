@@ -1,22 +1,16 @@
 import express, { Request, Response } from 'express';
-import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './docs/swagger';
 import authRoutes from './routes/authRoutes';
 import usersRoutes from './routes/userRoutes';
+import { securityHeaders, apiLimiter, corsMiddleware } from './middleware/securityMiddleware';
 
 const app = express();
 
-// CORS configuration
-const corsOptions = {
-  origin: process.env.BASE_URL || 'http://localhost:5000',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-  maxAge: 86400 // 24 hours
-};
-
-app.use(cors(corsOptions));
+// Apply security middleware
+app.use(securityHeaders);
+app.use(corsMiddleware);
+app.use(apiLimiter);
 
 // Parse JSON requests
 app.use(express.json());
