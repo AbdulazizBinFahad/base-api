@@ -22,17 +22,20 @@ const userSchema = new Schema<IUser>(
       unique: true,
       minlength: 4,
       maxlength: 20,
+      index: true,
     },
     email: {
       type: String,
       required: true,
       unique: true,
       lowercase: true,
+      index: true,
+      match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email'],
     },
     password: {
       type: String,
       required: true,
-      minlength: 6,
+      minlength: 8,
     },
     isVerified: {
       type: Boolean,
