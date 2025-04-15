@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import connectDB from './config/db'; // ✅ هذا لازم يكون default
+import connectDB from './config/db';
 import app from './app';
 
 const PORT = parseInt(process.env.PORT || '5000', 10);
