@@ -5,12 +5,8 @@ import { TokenPayload } from '../types/auth';
 
 dotenv.config();
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: TokenPayload;
-    }
-  }
+export interface AuthenticatedRequest extends Request {
+  user: TokenPayload;
 }
 
 export const authorize = (requiredRole?: string) => (req: Request, res: Response, next: NextFunction): void => {
@@ -24,7 +20,7 @@ export const authorize = (requiredRole?: string) => (req: Request, res: Response
 
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as TokenPayload;
-      req.user = decoded;
+      (req as AuthenticatedRequest).user = decoded;
 
       if (requiredRole && decoded.role !== requiredRole) {
         res.status(403).json({ message: 'Access denied. Insufficient permissions.' });
